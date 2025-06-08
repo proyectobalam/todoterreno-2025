@@ -1,6 +1,6 @@
 /*
   ============================================================
-   PROYECTO BALAM 2025 – Robofut - motor_test
+   PROYECTO BALAM 2025 – Todo Terreno - motor_test
    Universidad Galileo | Grupo Intelecto
   ============================================================
 
