@@ -64,8 +64,6 @@ El repositorio se divide en las siguientes secciones:
 
 ## Diagrama de Pines
 
-Para incluir tu diagrama de pinout, coloca la imagen en la carpeta `docs/images/` (por ejemplo, renómbrala a `shield_pinout.jpg`). Luego, en esta sección del README, referencia la imagen así:
-
 ![Pinout Shield](assets/esp32_pinout.jpeg)
 *Figura 1: Pinout ESP32 diseñada por Tesla Lab*
 
