@@ -1,6 +1,6 @@
 /*
   ============================================================
-   PROYECTO BALAM 2025 – Reto STEM - DabbleControl
+   PROYECTO BALAM 2025 – Todo Terreno STEM - DabbleControl
    Universidad Galileo | Grupo Intelecto
   ============================================================
 
