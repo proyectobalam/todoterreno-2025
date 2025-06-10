@@ -92,28 +92,46 @@ ControllerPtr myControllers[BP32_MAX_GAMEPADS];
 
 // ------------ Callback: Control Conectado ------------
 void onConnectedController(ControllerPtr ctl) {
-  // Obtener propiedades y dirección Bluetooth
-  const uint8_t* addr = ctl->getProperties().btaddr;
+  ControllerProperties properties = ctl->getProperties();
+  const uint8_t* addr = properties.btaddr;
 
-  // Verificar lista de direcciones permitidas
+  // Verificar si la dirección coincide con la permitida
   bool isAllowed = true;
   for (int i = 0; i < 6; i++) {
-    if (addr[i] != allowedAddress[i]) { isAllowed = false; break; }
-  }
-  if (!isAllowed) {
-    Serial.println("Control rechazado: dirección no permitida.");
-    return;
-  }
-
-  // Guardar en la primera ranura libre
-  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
-    if (myControllers[i] == nullptr) {
-      myControllers[i] = ctl;
-      Serial.printf("Control conectado en ranura %d\n", i);
-      return;
+    if (addr[i] != allowedAddress[i]) {
+      isAllowed = false;
+      break;
     }
   }
-  Serial.println("No hay ranuras libres para nuevo control.");
+
+  if (!isAllowed) {
+    Serial.println("CALLBACK: Controller rechazado (address no permitida).");
+    return;  // Salir sin hacer nada
+  }
+  bool foundEmptySlot = false;
+  for (int i = 0; i < BP32_MAX_GAMEPADS; i++) {
+    Serial.println("Controller");
+
+    if (myControllers[i] == nullptr) {
+      Serial.printf("CALLBACK: Controller is connected, index=%d\n", i);
+      // Additionally, you can get certain gamepad properties like:
+      // Model, VID, PID, BTAddr, flags, etc.
+      ControllerProperties properties = ctl->getProperties();
+      Serial.printf("Controller model: %s, VID=0x%04x, PID=0x%04x\n", ctl->getModelName().c_str(), properties.vendor_id, properties.product_id);
+      const uint8_t* addr = properties.btaddr;
+      Serial.printf("Address Controler: %2X:%2X:%2X:%2X:%2X:%2X\n", addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]);
+      // MARVO: 41:42: 0: 0:68:13
+      // Play: 0: 1:6C:9F:95:8
+      // GAMESIR:  A9:D7: D:A0:BD:A3
+      myControllers[i] = ctl;
+      foundEmptySlot = true;
+      break;
+    }
+  }
+
+  if (!foundEmptySlot) {
+    Serial.println("CALLBACK: Controller connected, but could not found empty slot");
+  }
 }
 
 // ------------ Callback: Control Desconectado ------------
